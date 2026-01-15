@@ -48,13 +48,6 @@
     --sidebar-accent-foreground: 210 40% 96%;
     --sidebar-border: 217 33% 17%;
     --sidebar-ring: 217 91% 60%;
-
-    /* Custom report tokens */
-    --report-header: 222 47% 11%;
-    --report-nav: 0 0% 100%;
-    --table-header: 210 40% 96%;
-    --table-row-hover: 217 91% 60% / 0.05;
-    --section-border: 214 32% 91%;
   }
 
   .dark {
@@ -100,12 +93,6 @@
     --sidebar-accent-foreground: 210 40% 96%;
     --sidebar-border: 217 33% 17%;
     --sidebar-ring: 217 91% 60%;
-
-    --report-header: 0 0% 100%;
-    --report-nav: 222 47% 15%;
-    --table-header: 217 33% 17%;
-    --table-row-hover: 217 91% 60% / 0.1;
-    --section-border: 217 33% 17%;
   }
 }
 
@@ -125,11 +112,15 @@
 
 @layer components {
   .report-section {
-    @apply scroll-mt-24;
+    scroll-margin-top: 6rem;
   }
 
   .nav-link {
-    @apply px-3 py-1.5 text-sm font-medium text-muted-foreground rounded-md transition-all duration-200 hover:text-foreground hover:bg-accent;
+    @apply px-3 py-1.5 text-sm font-medium text-muted-foreground rounded-md transition-all duration-200;
+  }
+
+  .nav-link:hover {
+    @apply text-foreground bg-accent;
   }
 
   .nav-link-active {
@@ -141,7 +132,15 @@
   }
 
   .data-table th {
-    @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground bg-table-header;
+    @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground bg-muted;
+  }
+
+  .data-table th:first-child {
+    @apply rounded-tl-md;
+  }
+
+  .data-table th:last-child {
+    @apply rounded-tr-md;
   }
 
   .data-table td {
@@ -149,7 +148,11 @@
   }
 
   .data-table tbody tr {
-    @apply transition-colors hover:bg-table-row-hover;
+    @apply transition-colors;
+  }
+
+  .data-table tbody tr:hover {
+    background-color: hsl(217 91% 60% / 0.05);
   }
 
   .metric-positive {
