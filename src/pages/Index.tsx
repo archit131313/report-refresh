@@ -5,15 +5,24 @@ import DataTable from "@/components/report/DataTable";
 import OncallInfo from "@/components/report/OncallInfo";
 import CommentarySection from "@/components/report/CommentarySection";
 import LatencyCard from "@/components/report/LatencyCard";
+import { 
+  Users, 
+  Ticket, 
+  ClipboardCheck, 
+  HeartPulse, 
+  Gauge, 
+  FolderKanban, 
+  MessageSquareText 
+} from "lucide-react";
 
 const sections = [
-  { id: "oncall", label: "Oncall Info" },
-  { id: "tickets", label: "Tickets Summary" },
-  { id: "reviews", label: "Reviews & Escalations" },
-  { id: "health", label: "Health Metrics" },
-  { id: "latency", label: "Service Latency" },
-  { id: "backlog", label: "Backlog" },
-  { id: "commentary", label: "Commentary" },
+  { id: "oncall", label: "Oncall Info", icon: Users },
+  { id: "tickets", label: "Tickets Summary", icon: Ticket },
+  { id: "reviews", label: "Reviews & Escalations", icon: ClipboardCheck },
+  { id: "health", label: "Health Metrics", icon: HeartPulse },
+  { id: "latency", label: "Service Latency", icon: Gauge },
+  { id: "backlog", label: "Backlog", icon: FolderKanban },
+  { id: "commentary", label: "Commentary", icon: MessageSquareText },
 ];
 
 const oncallData = [
@@ -123,7 +132,7 @@ const blockerWinsFields = [
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <ReportHeader
           title="FOS Weekly Report Summary"
@@ -133,16 +142,16 @@ const Index = () => {
         
         <SectionNav sections={sections} />
         
-        <div className="space-y-8">
-          <ReportCard id="oncall" title="Oncall Information">
+        <div className="space-y-6">
+          <ReportCard id="oncall" title="Oncall Information" icon={Users}>
             <OncallInfo data={oncallData} />
           </ReportCard>
 
-          <ReportCard id="tickets" title="Tickets Summary">
+          <ReportCard id="tickets" title="Tickets Summary" icon={Ticket}>
             <DataTable columns={ticketsColumns} data={ticketsData} highlightColumn="total" />
           </ReportCard>
 
-          <ReportCard id="reviews" title="Reviews & Escalations">
+          <ReportCard id="reviews" title="Reviews & Escalations" icon={ClipboardCheck}>
             <DataTable columns={reviewsColumns} data={reviewsData} highlightColumn="total" />
           </ReportCard>
 
@@ -150,32 +159,40 @@ const Index = () => {
             id="health"
             title="Operational Health Metrics"
             subtitle="& Decomposed / non-ticket race-chase available"
+            icon={HeartPulse}
           >
             <div className="space-y-8">
               <DataTable columns={healthColumns} data={healthData} highlightColumn="total" />
-              <div>
-                <h3 className="text-sm font-semibold text-foreground mb-4">Incomplete Items Tracking</h3>
+              <div className="pt-4 border-t border-border">
+                <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-4">
+                  <div className="w-2 h-2 rounded-full bg-warning"></div>
+                  Incomplete Items Tracking
+                </h3>
                 <DataTable columns={incompleteColumns} data={incompleteData} />
               </div>
             </div>
           </ReportCard>
 
-          <ReportCard id="latency" title="Service Latency Summary">
-            <div className="flex flex-col lg:flex-row gap-8">
+          <ReportCard id="latency" title="Service Latency Summary" icon={Gauge}>
+            <div className="flex flex-col lg:flex-row gap-6">
               <LatencyCard title="MBOS P50 Latency (ms)" data={mbosLatencyData} />
               <LatencyCard title="mosWinners P50 Latency (ms)" data={mosWinnersLatencyData} />
             </div>
           </ReportCard>
 
-          <ReportCard id="backlog" title="Backlog Management">
+          <ReportCard id="backlog" title="Backlog Management" icon={FolderKanban}>
             <DataTable columns={backlogColumns} data={backlogData} highlightColumn="resolved" />
           </ReportCard>
 
-          <ReportCard id="commentary" title="Commentary">
+          <ReportCard id="commentary" title="Commentary" icon={MessageSquareText}>
             <div className="space-y-8">
               <CommentarySection fields={commentaryFields} />
-              <CommentarySection fields={prioritiesFields} />
-              <CommentarySection fields={blockerWinsFields} />
+              <div className="pt-6 border-t border-border">
+                <CommentarySection fields={prioritiesFields} />
+              </div>
+              <div className="pt-6 border-t border-border">
+                <CommentarySection fields={blockerWinsFields} />
+              </div>
             </div>
           </ReportCard>
         </div>
