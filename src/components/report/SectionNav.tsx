@@ -41,22 +41,20 @@ const SectionNav = ({ sections }: SectionNavProps) => {
   };
 
   return (
-    <nav className="sticky top-0 z-40 bg-card/95 backdrop-blur-sm border-b border-border py-3 px-4 -mx-4 sm:-mx-6 lg:-mx-8 mb-8 shadow-nav">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide pb-1">
-          {sections.map((section) => (
-            <button
-              key={section.id}
-              onClick={() => scrollToSection(section.id)}
-              className={cn(
-                "nav-link whitespace-nowrap flex-shrink-0",
-                activeSection === section.id && "nav-link-active"
-              )}
-            >
-              {section.label}
-            </button>
-          ))}
-        </div>
+    <nav className="sticky top-0 z-40 bg-card border border-border rounded-lg py-3 px-4 mb-8 shadow-card">
+      <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide">
+        {sections.map((section) => (
+          <button
+            key={section.id}
+            onClick={() => scrollToSection(section.id)}
+            className={cn(
+              "nav-link whitespace-nowrap flex-shrink-0",
+              activeSection === section.id && "nav-link-active"
+            )}
+          >
+            {section.label}
+          </button>
+        ))}
       </div>
     </nav>
   );
