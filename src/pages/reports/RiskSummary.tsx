@@ -1,5 +1,5 @@
 import { ArrowLeft, ChevronDown, ChevronRight, CheckCircle2, AlertTriangle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import {
 import DashboardLayout from "@/components/layout/DashboardLayout";
 
 const RiskSummary = () => {
+  const { reportId } = useParams();
   const [peOpen, setPeOpen] = useState(true);
   const [sasOpen, setSasOpen] = useState(true);
   const [shepherdOpen, setShepherdOpen] = useState(false);
@@ -28,7 +29,7 @@ const RiskSummary = () => {
     <DashboardLayout>
       <div className="p-8">
         <Link
-          to="/reports"
+          to={`/reports/${reportId}`}
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
         >
           <ArrowLeft className="w-4 h-4" />

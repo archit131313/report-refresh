@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Generate from "./pages/Generate";
 import Reports from "./pages/Reports";
+import ReportDashboard from "./pages/reports/ReportDashboard";
 import LowSevAnalysis from "./pages/reports/LowSevAnalysis";
 import HighSevAnalysis from "./pages/reports/HighSevAnalysis";
 import OldestTickets from "./pages/reports/OldestTickets";
@@ -26,12 +27,13 @@ const App = () => (
           <Route path="/" element={<Home />} />
           <Route path="/generate" element={<Generate />} />
           <Route path="/reports" element={<Reports />} />
-          <Route path="/reports/low-sev" element={<LowSevAnalysis />} />
-          <Route path="/reports/high-sev" element={<HighSevAnalysis />} />
-          <Route path="/reports/oldest-tickets" element={<OldestTickets />} />
-          <Route path="/reports/service-health" element={<ServiceHealth />} />
-          <Route path="/reports/pipeline-health" element={<PipelineHealth />} />
-          <Route path="/reports/risk-summary" element={<RiskSummary />} />
+          <Route path="/reports/:reportId" element={<ReportDashboard />} />
+          <Route path="/reports/:reportId/low-sev" element={<LowSevAnalysis />} />
+          <Route path="/reports/:reportId/high-sev" element={<HighSevAnalysis />} />
+          <Route path="/reports/:reportId/oldest-tickets" element={<OldestTickets />} />
+          <Route path="/reports/:reportId/service-health" element={<ServiceHealth />} />
+          <Route path="/reports/:reportId/pipeline-health" element={<PipelineHealth />} />
+          <Route path="/reports/:reportId/risk-summary" element={<RiskSummary />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
