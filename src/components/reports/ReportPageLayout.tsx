@@ -21,16 +21,16 @@ const ReportPageLayout = ({
       <div className="p-8 max-w-7xl mx-auto">
         <Link
           to={`/reports/${reportId}`}
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors group"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           Back to Report Dashboard
         </Link>
 
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-1">{title}</h1>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">{title}</h1>
           {subtitle && (
-            <p className="text-muted-foreground">{subtitle}</p>
+            <p className="text-muted-foreground mt-1">{subtitle}</p>
           )}
         </div>
 
