@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BarChart3, Eye, Download, Calendar, AlertCircle, TrendingDown, Search, Filter } from "lucide-react";
+import { BarChart3, Eye, Download, Calendar, AlertCircle, TrendingDown, Search, Filter, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -60,24 +60,27 @@ const Reports = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Reports</h1>
-        <p className="text-muted-foreground mb-6">View and manage all generated reports</p>
+      <div className="p-8 max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-2">Reports</h1>
+          <p className="text-muted-foreground">View and manage all generated reports</p>
+        </div>
 
         {/* Search and Filter */}
-        <div className="flex gap-4 mb-6">
+        <div className="flex gap-4 mb-8">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Search reports by ID or group..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
+              className="pl-11 h-12 rounded-xl border-border/50 bg-card shadow-sm focus:shadow-md transition-shadow"
             />
           </div>
           <Select value={selectedGroup} onValueChange={setSelectedGroup}>
-            <SelectTrigger className="w-[180px]">
-              <Filter className="w-4 h-4 mr-2" />
+            <SelectTrigger className="w-[200px] h-12 rounded-xl border-border/50 bg-card shadow-sm">
+              <Filter className="w-4 h-4 mr-2 text-muted-foreground" />
               <SelectValue placeholder="All Groups" />
             </SelectTrigger>
             <SelectContent>
@@ -93,71 +96,85 @@ const Reports = () => {
         <div className="space-y-4">
           {filteredReports.map((report) => (
             <Link key={report.id} to={`/reports/${report.id}`}>
-              <Card className="p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <Card className="group p-6 hover:shadow-lg hover:border-primary/20 transition-all duration-300 cursor-pointer bg-card/80 backdrop-blur-sm">
                 {/* Header Row */}
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start justify-between mb-5">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center ring-1 ring-primary/10">
                       <BarChart3 className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-foreground">Report ID: {report.id}</h3>
-                        <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
+                      <div className="flex items-center gap-3 mb-1">
+                        <h3 className="font-semibold text-foreground text-lg">Report ID: {report.id}</h3>
+                        <Badge className="bg-green-100 text-green-700 hover:bg-green-100 font-medium">
                           {report.status}
                         </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">Created {report.createdAt}</p>
-                      <Badge variant="outline" className="bg-blue-50 text-primary border-blue-200">
+                      <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 font-medium">
                         {report.resolverGroup}
                       </Badge>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" className="rounded-xl hover:bg-muted" onClick={(e) => e.preventDefault()}>
                       <Eye className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" className="rounded-xl hover:bg-muted" onClick={(e) => e.preventDefault()}>
                       <Download className="w-4 h-4" />
                     </Button>
+                    <div className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center ml-2 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </div>
                   </div>
                 </div>
 
                 {/* Stats Row */}
                 <div className="grid grid-cols-4 gap-4">
-                  <div className="bg-muted/30 rounded-lg p-4">
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
-                      <Calendar className="w-3 h-3" />
+                  <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1.5 uppercase tracking-wide">
+                      <Calendar className="w-3.5 h-3.5" />
                       Start Date
                     </div>
-                    <p className="font-semibold">{report.startDate}</p>
+                    <p className="font-semibold text-foreground">{report.startDate}</p>
                   </div>
-                  <div className="bg-muted/30 rounded-lg p-4">
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
-                      <Calendar className="w-3 h-3" />
+                  <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1.5 uppercase tracking-wide">
+                      <Calendar className="w-3.5 h-3.5" />
                       End Date
                     </div>
-                    <p className="font-semibold">{report.endDate}</p>
+                    <p className="font-semibold text-foreground">{report.endDate}</p>
                   </div>
-                  <div className="bg-red-50 rounded-lg p-4">
-                    <div className="flex items-center gap-1 text-xs text-red-600 mb-1">
-                      <AlertCircle className="w-3 h-3" />
+                  <div className="bg-gradient-to-br from-red-50 to-pink-50/50 rounded-xl p-4 border border-red-100">
+                    <div className="flex items-center gap-1.5 text-xs text-red-600 mb-1.5 uppercase tracking-wide">
+                      <AlertCircle className="w-3.5 h-3.5" />
                       High Severity
                     </div>
-                    <p className="font-semibold text-2xl text-red-600">{report.highSeverity}</p>
+                    <p className="font-bold text-2xl text-red-600">{report.highSeverity}</p>
                   </div>
-                  <div className="bg-amber-50 rounded-lg p-4">
-                    <div className="flex items-center gap-1 text-xs text-amber-600 mb-1">
-                      <TrendingDown className="w-3 h-3" />
+                  <div className="bg-gradient-to-br from-amber-50 to-yellow-50/50 rounded-xl p-4 border border-amber-100">
+                    <div className="flex items-center gap-1.5 text-xs text-amber-600 mb-1.5 uppercase tracking-wide">
+                      <TrendingDown className="w-3.5 h-3.5" />
                       Low Severity
                     </div>
-                    <p className="font-semibold text-2xl text-amber-600">{report.lowSeverity}</p>
+                    <p className="font-bold text-2xl text-amber-600">{report.lowSeverity}</p>
                   </div>
                 </div>
               </Card>
             </Link>
           ))}
         </div>
+
+        {/* Empty State */}
+        {filteredReports.length === 0 && (
+          <div className="text-center py-16">
+            <div className="w-16 h-16 rounded-2xl bg-muted/50 flex items-center justify-center mx-auto mb-4">
+              <Search className="w-8 h-8 text-muted-foreground" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground mb-2">No reports found</h3>
+            <p className="text-muted-foreground">Try adjusting your search or filter criteria</p>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 interface MetricItem {
@@ -15,11 +14,11 @@ interface SummaryMetricsProps {
 
 const SummaryMetrics = ({ metrics, columns = 3, className }: SummaryMetricsProps) => {
   const variantStyles = {
-    default: "bg-card border-border",
-    highlight: "bg-amber-50 border-amber-200",
-    success: "bg-green-50 border-green-200",
-    warning: "bg-yellow-50 border-yellow-200",
-    danger: "bg-red-50 border-red-200",
+    default: "bg-gradient-to-br from-card to-muted/20 border-border/50",
+    highlight: "bg-gradient-to-br from-amber-50 to-yellow-50/50 border-amber-200/50",
+    success: "bg-gradient-to-br from-green-50 to-emerald-50/50 border-green-200/50",
+    warning: "bg-gradient-to-br from-yellow-50 to-amber-50/50 border-yellow-200/50",
+    danger: "bg-gradient-to-br from-red-50 to-pink-50/50 border-red-200/50",
   };
 
   const columnClasses = {
@@ -35,11 +34,11 @@ const SummaryMetrics = ({ metrics, columns = 3, className }: SummaryMetricsProps
         <div
           key={index}
           className={cn(
-            "p-5 rounded-xl border transition-all hover:shadow-md",
+            "p-5 rounded-xl border transition-all duration-300 hover:shadow-md hover:-translate-y-0.5",
             variantStyles[metric.variant || "default"]
           )}
         >
-          <p className="text-3xl font-bold text-foreground mb-1">{metric.value}</p>
+          <p className="text-3xl font-bold text-foreground mb-1 tracking-tight">{metric.value}</p>
           <p className="text-sm text-muted-foreground">{metric.label}</p>
         </div>
       ))}
