@@ -1,128 +1,162 @@
-import { ArrowLeft, Download, ChevronRight, AlertCircle, TrendingUp, Clock, Heart, Wrench, ShieldAlert, FileText } from "lucide-react";
+import { useState } from "react";
+import { BarChart3, Eye, Download, Calendar, AlertCircle, TrendingDown, Search, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 
-const reportCards = [
+const reports = [
   {
-    id: "high-sev",
-    title: "High Sev Report",
-    description: "AI-powered analysis of high severity tickets with detailed impact, root cause, and resolution insights.",
-    icon: AlertCircle,
-    color: "bg-gradient-to-br from-red-100 to-pink-50",
-    iconBg: "bg-white",
-    iconColor: "text-red-500",
-    path: "/reports/high-sev",
+    id: "41cb455f",
+    createdAt: "1/16/2026, 10:54 AM",
+    resolverGroup: "FMA-FeaturedOffer",
+    startDate: "2025-12-29",
+    endDate: "2025-12-29",
+    highSeverity: 0,
+    lowSeverity: 9,
+    status: "COMPLETED",
   },
   {
-    id: "low-sev",
-    title: "Low Sev Trend Analysis",
-    description: "Track patterns and trends in low severity tickets over time to identify recurring issues.",
-    icon: TrendingUp,
-    color: "bg-gradient-to-br from-green-100 to-emerald-50",
-    iconBg: "bg-white",
-    iconColor: "text-green-500",
-    path: "/reports/low-sev",
+    id: "26f40d0d",
+    createdAt: "1/16/2026, 12:19 AM",
+    resolverGroup: "FMA-FeaturedOffer",
+    startDate: "2025-12-29",
+    endDate: "2025-12-29",
+    highSeverity: 0,
+    lowSeverity: 9,
+    status: "COMPLETED",
   },
   {
-    id: "oldest",
-    title: "Top 10 Oldest Tickets",
-    description: "Identifies the 10 oldest open tickets in the resolver group that are older than 6 months and require immediate attention to reduce backlog.",
-    icon: Clock,
-    color: "bg-gradient-to-br from-amber-100 to-yellow-50",
-    iconBg: "bg-white",
-    iconColor: "text-amber-500",
-    path: "/reports/oldest-tickets",
-  },
-  {
-    id: "service-health",
-    title: "Service Health",
-    description: "Monitor MBOS API p50 latency across DPX and SX regions to track service performance.",
-    icon: Heart,
-    color: "bg-gradient-to-br from-cyan-100 to-sky-50",
-    iconBg: "bg-white",
-    iconColor: "text-cyan-500",
-    path: "/reports/service-health",
-  },
-  {
-    id: "pipeline",
-    title: "Pipeline Health",
-    description: "Monitor FMA pipeline deployment health including failed builds, tests, blocked pipelines, and interventions.",
-    icon: Wrench,
-    color: "bg-gradient-to-br from-teal-100 to-emerald-50",
-    iconBg: "bg-white",
-    iconColor: "text-teal-500",
-    path: "/reports/pipeline-health",
-  },
-  {
-    id: "risk",
-    title: "Risk Summary",
-    description: "Track and manage security risks across Policy Engine, SAS, and Shepherd with action plans and status tracking.",
-    icon: ShieldAlert,
-    color: "bg-gradient-to-br from-orange-100 to-amber-50",
-    iconBg: "bg-white",
-    iconColor: "text-orange-500",
-    path: "/reports/risk-summary",
+    id: "e286f3d6",
+    createdAt: "1/15/2026, 6:44 PM",
+    resolverGroup: "FMA-FeaturedOffer",
+    startDate: "2026-01-01",
+    endDate: "2026-01-08",
+    highSeverity: 1,
+    lowSeverity: 137,
+    status: "COMPLETED",
   },
 ];
 
 const Reports = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState("all");
+
+  const filteredReports = reports.filter((report) => {
+    const matchesSearch = report.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      report.resolverGroup.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesGroup = selectedGroup === "all" || report.resolverGroup === selectedGroup;
+    return matchesSearch && matchesGroup;
+  });
+
   return (
     <DashboardLayout>
       <div className="p-8">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Reports
-            </Link>
-            <h1 className="text-3xl font-bold text-foreground">Report Dashboard</h1>
-            <p className="text-muted-foreground">Report ID: 41cb455f</p>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Reports</h1>
+        <p className="text-muted-foreground mb-6">View and manage all generated reports</p>
+
+        {/* Search and Filter */}
+        <div className="flex gap-4 mb-6">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search reports by ID or group..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
           </div>
-          <Button variant="outline" className="gap-2">
-            <Download className="w-4 h-4" />
-            Export
-          </Button>
+          <Select value={selectedGroup} onValueChange={setSelectedGroup}>
+            <SelectTrigger className="w-[180px]">
+              <Filter className="w-4 h-4 mr-2" />
+              <SelectValue placeholder="All Groups" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Groups</SelectItem>
+              <SelectItem value="FMA-FeaturedOffer">FMA-FeaturedOffer</SelectItem>
+              <SelectItem value="FMA-Business">FMA-Business</SelectItem>
+              <SelectItem value="FMA-Product">FMA-Product</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        {/* Weekly Report Summary Card */}
-        <Card className="p-6 mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-0">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center">
-              <FileText className="w-7 h-7 text-primary" />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-lg font-semibold text-foreground">Weekly Report Summary</h2>
-              <p className="text-sm text-muted-foreground">
-                Consolidated weekly oncall report with tickets summary, reviews, operational health metrics, service latency, and handover notes. Ready for publishing.
-              </p>
-            </div>
-            <ChevronRight className="w-5 h-5 text-muted-foreground" />
-          </div>
-        </Card>
-
-        {/* Report Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {reportCards.map((card) => {
-            const Icon = card.icon;
-            return (
-              <Link key={card.id} to={card.path}>
-                <Card
-                  className={`p-6 h-full ${card.color} border-0 hover:shadow-md transition-shadow cursor-pointer`}
-                >
-                  <div className={`w-12 h-12 rounded-xl ${card.iconBg} flex items-center justify-center mb-4 shadow-sm`}>
-                    <Icon className={`w-6 h-6 ${card.iconColor}`} />
+        {/* Report List */}
+        <div className="space-y-4">
+          {filteredReports.map((report) => (
+            <Link key={report.id} to={`/reports/${report.id}`}>
+              <Card className="p-6 hover:shadow-md transition-shadow cursor-pointer">
+                {/* Header Row */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center">
+                      <BarChart3 className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-semibold text-foreground">Report ID: {report.id}</h3>
+                        <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
+                          {report.status}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-2">Created {report.createdAt}</p>
+                      <Badge variant="outline" className="bg-blue-50 text-primary border-blue-200">
+                        {report.resolverGroup}
+                      </Badge>
+                    </div>
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">{card.title}</h3>
-                  <p className="text-sm text-muted-foreground">{card.description}</p>
-                </Card>
-              </Link>
-            );
-          })}
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon">
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon">
+                      <Download className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Stats Row */}
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                      <Calendar className="w-3 h-3" />
+                      Start Date
+                    </div>
+                    <p className="font-semibold">{report.startDate}</p>
+                  </div>
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                      <Calendar className="w-3 h-3" />
+                      End Date
+                    </div>
+                    <p className="font-semibold">{report.endDate}</p>
+                  </div>
+                  <div className="bg-red-50 rounded-lg p-4">
+                    <div className="flex items-center gap-1 text-xs text-red-600 mb-1">
+                      <AlertCircle className="w-3 h-3" />
+                      High Severity
+                    </div>
+                    <p className="font-semibold text-2xl text-red-600">{report.highSeverity}</p>
+                  </div>
+                  <div className="bg-amber-50 rounded-lg p-4">
+                    <div className="flex items-center gap-1 text-xs text-amber-600 mb-1">
+                      <TrendingDown className="w-3 h-3" />
+                      Low Severity
+                    </div>
+                    <p className="font-semibold text-2xl text-amber-600">{report.lowSeverity}</p>
+                  </div>
+                </div>
+              </Card>
+            </Link>
+          ))}
         </div>
       </div>
     </DashboardLayout>

@@ -1,5 +1,5 @@
 import { ArrowLeft, ChevronDown, Check, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -54,13 +54,14 @@ const allPipelines = [
 ];
 
 const PipelineHealth = () => {
+  const { reportId } = useParams();
   const [isOpen, setIsOpen] = useState(true);
 
   return (
     <DashboardLayout>
       <div className="p-8">
         <Link
-          to="/reports"
+          to={`/reports/${reportId}`}
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
         >
           <ArrowLeft className="w-4 h-4" />

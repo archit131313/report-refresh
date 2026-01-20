@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import ReportInfo from "@/components/reports/ReportInfo";
@@ -48,11 +48,13 @@ const categories = [
 ];
 
 const LowSevAnalysis = () => {
+  const { reportId } = useParams();
+  
   return (
     <DashboardLayout>
       <div className="p-8">
         <Link
-          to="/reports"
+          to={`/reports/${reportId}`}
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
         >
           <ArrowLeft className="w-4 h-4" />

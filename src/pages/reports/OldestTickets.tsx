@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,11 +27,13 @@ const tickets = [
 ];
 
 const OldestTickets = () => {
+  const { reportId } = useParams();
+  
   return (
     <DashboardLayout>
       <div className="p-8">
         <Link
-          to="/reports"
+          to={`/reports/${reportId}`}
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
         >
           <ArrowLeft className="w-4 h-4" />
