@@ -21,9 +21,9 @@ const pipelinesData: Pipeline[] = [
   {
     name: "FMAItemPrecompute-release",
     status: "Available",
-    avgTimeToProdHrs: 81.4,
-    overrideDeploy: 0.806,
-    deployFrequency: "0.5/week",
+    avgTimeToProdHrs: 0.0,
+    overrideDeploy: 0.000,
+    deployFrequency: 2.0,
     workflows: [
       {
         name: "Run Consistency Checker",
@@ -66,9 +66,9 @@ const pipelinesData: Pipeline[] = [
   {
     name: "DeliveryFrictionDatapathQueries-mainline",
     status: "Blocked",
-    avgTimeToProdHrs: 16.5,
-    overrideDeploy: 0.806,
-    deployFrequency: "0.5/week",
+    avgTimeToProdHrs: 0.1,
+    overrideDeploy: 0.000,
+    deployFrequency: 2.0,
     workflows: [
       {
         name: "Run Consistency Checker",
@@ -84,9 +84,9 @@ const pipelinesData: Pipeline[] = [
   {
     name: "FMATicketAutomation",
     status: "Available",
-    avgTimeToProdHrs: 0.49,
-    overrideDeploy: 0.806,
-    deployFrequency: "0.5/week",
+    avgTimeToProdHrs: 82.3,
+    overrideDeploy: 0.000,
+    deployFrequency: 2.0,
     workflows: [],
     codeReviews: [],
     commitsWithoutCR: [],
@@ -94,9 +94,9 @@ const pipelinesData: Pipeline[] = [
   {
     name: "EUCX-MinimumOrderQuantityDatapath",
     status: "Blocked",
-    avgTimeToProdHrs: 1.14,
-    overrideDeploy: 0.806,
-    deployFrequency: "0.5/week",
+    avgTimeToProdHrs: 0.2,
+    overrideDeploy: 0.000,
+    deployFrequency: 1.0,
     workflows: [
       {
         name: "Run Consistency Checker",
@@ -113,9 +113,9 @@ const pipelinesData: Pipeline[] = [
   {
     name: "FMADeliveryPromiseDatapathQueries",
     status: "Blocked",
-    avgTimeToProdHrs: 0.05,
-    overrideDeploy: 0.806,
-    deployFrequency: "0.5/week",
+    avgTimeToProdHrs: 0.0,
+    overrideDeploy: 1.500,
+    deployFrequency: 2.0,
     workflows: [
       {
         name: "Run Consistency Checker",
@@ -131,9 +131,9 @@ const pipelinesData: Pipeline[] = [
   {
     name: "FMARequestReplayService",
     status: "Blocked",
-    avgTimeToProdHrs: 16.5,
-    overrideDeploy: 0.928,
-    deployFrequency: "9.57/week",
+    avgTimeToProdHrs: 0.1,
+    overrideDeploy: 1.000,
+    deployFrequency: 1.0,
     workflows: [],
     codeReviews: [],
     commitsWithoutCR: [],
@@ -141,9 +141,9 @@ const pipelinesData: Pipeline[] = [
   {
     name: "MBOSDynamicBuyingOptions-release",
     status: "Available",
-    avgTimeToProdHrs: 80.05,
-    overrideDeploy: 0.194,
-    deployFrequency: "9.57/week",
+    avgTimeToProdHrs: 24.8,
+    overrideDeploy: 0.000,
+    deployFrequency: 6.0,
     workflows: [],
     codeReviews: [],
     commitsWithoutCR: [],
@@ -151,19 +151,19 @@ const pipelinesData: Pipeline[] = [
   {
     name: "BuyingOptionLoggerDatapathViews-mainline",
     status: "Available",
-    avgTimeToProdHrs: 1.91,
-    overrideDeploy: 0.806,
-    deployFrequency: "0.5/week",
+    avgTimeToProdHrs: 3.3,
+    overrideDeploy: 0.000,
+    deployFrequency: 1.0,
     workflows: [],
     codeReviews: [],
     commitsWithoutCR: [],
   },
   {
     name: "FMAV5RestBindings-release",
-    status: "Available",
-    avgTimeToProdHrs: 36.05,
-    overrideDeploy: 0.459,
-    deployFrequency: "8.5/week",
+    status: "Blocked",
+    avgTimeToProdHrs: 14.1,
+    overrideDeploy: 0.333,
+    deployFrequency: 6.0,
     workflows: [
       {
         name: "Run Consistency Checker",

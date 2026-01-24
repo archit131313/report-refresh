@@ -36,7 +36,7 @@ export interface Pipeline {
   status: "Available" | "Blocked" | "Unhealthy";
   avgTimeToProdHrs: number;
   overrideDeploy: number;
-  deployFrequency: string;
+  deployFrequency: number;
   workflows: Workflow[];
   codeReviews: CodeReview[];
   commitsWithoutCR: CommitWithoutCR[];
