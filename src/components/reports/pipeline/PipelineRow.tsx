@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight, TrendingUp, TrendingDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -27,9 +27,6 @@ const getStatusBadgeClass = (status: string) => {
 
 const PipelineRow = ({ pipeline }: PipelineRowProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
-  // Determine if override/deploy is trending up or down
-  const isOverrideUp = pipeline.overrideDeploy > 0.5;
   const isBlocked = pipeline.status === "Blocked";
 
   return (
@@ -70,11 +67,8 @@ const PipelineRow = ({ pipeline }: PipelineRowProps) => {
           </Badge>
         </TableCell>
         <TableCell className="text-center py-4">
-          <span className={cn(
-            "font-mono text-sm px-2 py-1 rounded-md transition-colors",
-            "group-hover:bg-muted"
-          )}>
-            {pipeline.avgTimeToProdHrs.toFixed(1)}
+          <span className="font-mono text-sm text-muted-foreground">
+            {pipeline.avgTimeToProdHrs.toFixed(1)}h
           </span>
         </TableCell>
         <TableCell className="text-center py-4">
@@ -82,12 +76,15 @@ const PipelineRow = ({ pipeline }: PipelineRowProps) => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <span className={cn(
-                  "inline-flex items-center gap-1.5 font-mono text-sm px-2 py-1 rounded-md transition-all",
-                  "group-hover:bg-muted cursor-help",
-                  isOverrideUp ? 'text-emerald-600 font-semibold' : 'text-muted-foreground'
+                  "inline-flex items-center gap-1.5 font-mono text-sm cursor-help",
+                  pipeline.overrideDeploy > 0 ? 'text-orange-500 font-medium' : 'text-muted-foreground'
                 )}>
                   {pipeline.overrideDeploy.toFixed(3)}
-                  {isOverrideUp && <TrendingUp className="w-3.5 h-3.5" />}
+                  {pipeline.overrideDeploy > 0 && (
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
                 </span>
               </TooltipTrigger>
               <TooltipContent className="bg-popover border shadow-lg">
@@ -97,11 +94,9 @@ const PipelineRow = ({ pipeline }: PipelineRowProps) => {
           </TooltipProvider>
         </TableCell>
         <TableCell className="text-center py-4">
-          <span className={cn(
-            "font-mono text-sm px-2 py-1 rounded-md transition-colors",
-            "group-hover:bg-muted"
-          )}>
-            {pipeline.deployFrequency}
+          <span className="font-mono text-sm text-muted-foreground">
+            <span className="text-foreground font-medium">{pipeline.deployFrequency.toFixed(1)}</span>
+            <span className="text-muted-foreground">/week</span>
           </span>
         </TableCell>
       </TableRow>
