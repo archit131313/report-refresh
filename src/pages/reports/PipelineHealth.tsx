@@ -1,4 +1,5 @@
-import { FolderOpen, BarChart3, AlertTriangle, Clock } from "lucide-react";
+import { useState } from "react";
+import { FolderOpen, BarChart3, AlertTriangle, Clock, ChevronDown, ChevronRight, Info, Lightbulb } from "lucide-react";
 import { useParams } from "react-router-dom";
 import {
   Table,
@@ -7,19 +8,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ReportPageLayout from "@/components/reports/ReportPageLayout";
 import ReportSection from "@/components/reports/ReportSection";
 import SummaryMetrics from "@/components/reports/SummaryMetrics";
-import ActionItemsSection from "@/components/reports/ActionItemsSection";
 import { PipelineRow, Pipeline } from "@/components/reports/pipeline";
+import { Input } from "@/components/ui/input";
 
 const pipelinesData: Pipeline[] = [
   {
     name: "FMAItemPrecompute-release",
-    status: "Blocked",
-    failedBuilds: 0,
-    failedTests: 0,
-    blocked: true,
+    status: "Available",
+    avgTimeToProdHrs: 81.4,
+    overrideDeploy: 0.806,
+    deployFrequency: "0.5/week",
     workflows: [
       {
         name: "Run Consistency Checker",
@@ -29,31 +33,28 @@ const pipelinesData: Pipeline[] = [
     ],
     codeReviews: [
       {
-        id: "CR-224067038",
-        author: "bverobar",
-        description: "Remove OUB source from projection after ZAZ trigger has been...",
-        deployedTo: ["IAD"],
-      },
-      {
         id: "CR-176621717",
         author: "sriramsh",
         description: 'Revert "Cleaning up Seller Rating v2: TT: https://t.corp.ama...',
         deployedTo: ["IAD"],
+        fileChanges: [],
       },
       {
         id: "CR-181900069",
         author: "manojsv",
         description: "fix: Update CPT payload expiration date in precompute tests...",
         deployedTo: ["IAD"],
+        fileChanges: [],
+      },
+      {
+        id: "CR-224067038",
+        author: "bverobar",
+        description: "Remove OUB source from projection after ZAZ trigger has been...",
+        deployedTo: ["IAD"],
+        fileChanges: [],
       },
     ],
     commitsWithoutCR: [
-      {
-        package: "FMAItemPrecomputeDeploymentPackage/mainline",
-        author: "snaparch",
-        description: "Removing the FMACollectionsDatapathQueries",
-        commitHash: "5fa64a095a83",
-      },
       {
         package: "FMAItemPrecomputeDeploymentPackage/mainline",
         author: "snaparch",
@@ -65,9 +66,9 @@ const pipelinesData: Pipeline[] = [
   {
     name: "DeliveryFrictionDatapathQueries-mainline",
     status: "Blocked",
-    failedBuilds: 0,
-    failedTests: 0,
-    blocked: true,
+    avgTimeToProdHrs: 16.5,
+    overrideDeploy: 0.806,
+    deployFrequency: "0.5/week",
     workflows: [
       {
         name: "Run Consistency Checker",
@@ -77,22 +78,15 @@ const pipelinesData: Pipeline[] = [
         ],
       },
     ],
-    codeReviews: [
-      {
-        id: "CR-234521098",
-        author: "johnsmith",
-        description: "Add delivery friction metrics calculation...",
-        deployedTo: ["IAD", "PDX"],
-      },
-    ],
+    codeReviews: [],
     commitsWithoutCR: [],
   },
   {
     name: "FMATicketAutomation",
     status: "Available",
-    failedBuilds: 0,
-    failedTests: 0,
-    blocked: false,
+    avgTimeToProdHrs: 0.49,
+    overrideDeploy: 0.806,
+    deployFrequency: "0.5/week",
     workflows: [],
     codeReviews: [],
     commitsWithoutCR: [],
@@ -100,9 +94,9 @@ const pipelinesData: Pipeline[] = [
   {
     name: "EUCX-MinimumOrderQuantityDatapath",
     status: "Blocked",
-    failedBuilds: 0,
-    failedTests: 2,
-    blocked: true,
+    avgTimeToProdHrs: 1.14,
+    overrideDeploy: 0.806,
+    deployFrequency: "0.5/week",
     workflows: [
       {
         name: "Run Consistency Checker",
@@ -113,22 +107,15 @@ const pipelinesData: Pipeline[] = [
         ],
       },
     ],
-    codeReviews: [
-      {
-        id: "CR-198765432",
-        author: "alexchen",
-        description: "Update minimum order quantity thresholds for EU...",
-        deployedTo: ["DUB"],
-      },
-    ],
+    codeReviews: [],
     commitsWithoutCR: [],
   },
   {
     name: "FMADeliveryPromiseDatapathQueries",
     status: "Blocked",
-    failedBuilds: 0,
-    failedTests: 1,
-    blocked: true,
+    avgTimeToProdHrs: 0.05,
+    overrideDeploy: 0.806,
+    deployFrequency: "0.5/week",
     workflows: [
       {
         name: "Run Consistency Checker",
@@ -143,48 +130,40 @@ const pipelinesData: Pipeline[] = [
   },
   {
     name: "FMARequestReplayService",
-    status: "Unhealthy",
-    failedBuilds: 0,
-    failedTests: 0,
-    blocked: false,
+    status: "Blocked",
+    avgTimeToProdHrs: 16.5,
+    overrideDeploy: 0.928,
+    deployFrequency: "9.57/week",
     workflows: [],
     codeReviews: [],
     commitsWithoutCR: [],
   },
   {
     name: "MBOSDynamicBuyingOptions-release",
-    status: "Blocked",
-    failedBuilds: 0,
-    failedTests: 1,
-    blocked: true,
-    workflows: [
-      {
-        name: "Run Consistency Checker",
-        overallSuccessRate: 75,
-        consistencyChecks: [
-          { name: "Buying Options Cache", successRate: 75, passed: 15, total: 20 },
-        ],
-      },
-    ],
+    status: "Available",
+    avgTimeToProdHrs: 80.05,
+    overrideDeploy: 0.194,
+    deployFrequency: "9.57/week",
+    workflows: [],
     codeReviews: [],
     commitsWithoutCR: [],
   },
   {
     name: "BuyingOptionLoggerDatapathViews-mainline",
     status: "Available",
-    failedBuilds: 0,
-    failedTests: 0,
-    blocked: false,
+    avgTimeToProdHrs: 1.91,
+    overrideDeploy: 0.806,
+    deployFrequency: "0.5/week",
     workflows: [],
     codeReviews: [],
     commitsWithoutCR: [],
   },
   {
     name: "FMAV5RestBindings-release",
-    status: "Unhealthy",
-    failedBuilds: 0,
-    failedTests: 0,
-    blocked: false,
+    status: "Available",
+    avgTimeToProdHrs: 36.05,
+    overrideDeploy: 0.459,
+    deployFrequency: "8.5/week",
     workflows: [
       {
         name: "Run Consistency Checker",
@@ -198,112 +177,123 @@ const pipelinesData: Pipeline[] = [
     ],
     codeReviews: [
       {
-        id: "CR-85637622",
-        author: "davidnd",
-        description: "Adding FMACoreRankingDatapathQueries to deployment packages...",
-        deployedTo: ["DUB", "IAD", "PDX", "PEK"],
-      },
-      {
         id: "CR-246529128",
         author: "qianghw",
         description: "added TAR rule to autofds cr: https://code.amazon.com/revie...",
-        deployedTo: ["DUB", "PDX", "PEK"],
+        deployedTo: ["DUB", "IAD", "PDX", "PEK"],
+        fileChanges: [
+          { fileName: "FMAPrerankingDatapathQueries/mainline", commitHash: "7b673c497cc" },
+          { fileName: "FMPRPreExecutionQueries/mainline", commitHash: "3fa74b3ab28" },
+          { fileName: "FMRRExecutionQueries/mainline", commitHash: "8dc23f4ee3a" },
+          { fileName: "FMRNPreRankingQueries/mainline", commitHash: "4de12c89901" },
+          { fileName: "FMRNExecutionQueries/mainline", commitHash: "9ab45d67123" },
+          { fileName: "FMRNPostExecutionQueries/mainline", commitHash: "1bc56e78234" },
+          { fileName: "FMRNStarkExecutionQueries/mainline", commitHash: "2cd67f89345" },
+          { fileName: "FMRNFinalExecutionQueries/mainline", commitHash: "3de78a90456" },
+          { fileName: "FMRPPrerankingDatapathQueries/mainline", commitHash: "4ef89b01567" },
+          { fileName: "FMRPPreExecutionQueries/mainline", commitHash: "5fa90c12678" },
+          { fileName: "FMRPExecutionQueries/mainline", commitHash: "6ab01d23789" },
+          { fileName: "FMRPPostExecutionQueries/mainline", commitHash: "7bc12e34890" },
+          { fileName: "FMRPFinalExecutionQueries/mainline", commitHash: "8cd23f45901" },
+          { fileName: "FMRCustomerSegmentDatapathQueries/mainline", commitHash: "9de34a56012" },
+        ],
       },
       {
         id: "CR-236930530",
         author: "dhvarise",
         description: "moving resultsMetricsDiagnostics to postHandlers cr: https://cod...",
         deployedTo: ["DUB", "IAD", "PDX", "PEK"],
+        fileChanges: [
+          { fileName: "FMAPrerankingDatapathQueries/mainline", commitHash: "ab12cd3456" },
+          { fileName: "FMAPrerankingDatapathQueries/mainline", commitHash: "cd34ef5678" },
+        ],
       },
       {
         id: "CR-245558906",
         author: "sntus",
         description: "Make default customerid as 0 if not provided in FOS gateway...",
         deployedTo: ["DUB", "IAD"],
+        fileChanges: [],
       },
       {
-        id: "CR-245899306",
-        author: "tanvato",
-        description: "added context for request replay and integration requests c...",
-        deployedTo: ["DUB", "IAD"],
-      },
-      {
-        id: "CR-241760499",
-        author: "carymatt",
-        description: "Changes to Live Q2S2 Config for ItemTypeAsinList in Latent...",
-        deployedTo: ["DUB", "IAD"],
-      },
-      {
-        id: "CR-244009120",
-        author: "dkfluni",
-        description: "added constraints for 3 new fields for box logging for xT-SM...",
-        deployedTo: ["DUB", "IAD"],
-      },
-      {
-        id: "CR-217968265",
-        author: "edvia",
-        description: "Revert 'Adding mdsp view to trigger build to re-master FMACtr...",
-        deployedTo: ["DUB", "IAD"],
-      },
-      {
-        id: "CR-243595027",
-        author: "jyucejwn",
-        description: "Fix FQRS stf leak cr: https://code.amazon.com/reviews/CR-2...",
-        deployedTo: ["DUB", "IAD"],
+        id: "CR-85637622",
+        author: "davidnd",
+        description: "Adding FMACoreRankingDatapathQueries to deployment packages...",
+        deployedTo: ["DUB", "IAD", "PDX", "PEK"],
+        fileChanges: [
+          { fileName: "FMAPostExecutionQueries/mainline", commitHash: "a0e01ce8087" },
+          { fileName: "FMAPostExecutionQueries/mainline", commitHash: "a0e01ce8087" },
+        ],
       },
     ],
-    commitsWithoutCR: [
-      {
-        package: "FMAPostExecutionQueries/mainline",
-        author: "jinchang",
-        description: "Updating CRUX Template for COE-A-28408876",
-        commitHash: "ce6c5ce8e8969",
-      },
-      {
-        package: "FMAPrerankingDatapathQueries/mainline",
-        author: "jinchang",
-        description: "Updating CRUX Template for COE-A-3845876",
-        commitHash: "e72c5ffe9d8a5",
-      },
-      {
-        package: "FMACustomerSegmentDatapathQueries/mainline",
-        author: "jinchang",
-        description: "Updating CRUX Template for COE-A-7845878",
-        commitHash: "87cf994867at",
-      },
-    ],
+    commitsWithoutCR: [],
   },
 ];
 
 // Calculate summary statistics
 const totalPipelines = pipelinesData.length;
 const healthyPipelines = pipelinesData.filter(p => p.status === "Available").length;
-const blockedPipelines = pipelinesData.filter(p => p.blocked).length;
+const blockedPipelines = pipelinesData.filter(p => p.status === "Blocked").length;
 const unhealthyPipelines = pipelinesData.filter(p => p.status === "Unhealthy").length;
 const needAttention = blockedPipelines + unhealthyPipelines;
-const healthRate = Math.round((healthyPipelines / totalPipelines) * 100);
 
-// Generate auto action items
-const autoGeneratedItems = [
-  {
-    id: "unhealthy-pipelines",
-    title: `Unhealthy Pipelines: ${unhealthyPipelines + blockedPipelines} pipeline(s) need attention. Review failed builds and tests.`,
-    severity: "medium" as const,
-  },
-  {
-    id: "failed-tests",
-    title: `Failed Tests: ${pipelinesData.reduce((acc, p) => acc + p.failedTests, 0)} test failure(s) detected. Review and fix failing tests.`,
-    severity: "critical" as const,
-  },
-  {
-    id: "blocked-pipelines",
-    title: `Blocked Pipelines: ${blockedPipelines} pipeline(s) are blocked. Urgent attention required.`,
-    severity: "critical" as const,
-  },
-];
+// Get blocked pipeline details for action items
+const blockedPipelineDetails = pipelinesData.filter(p => p.status === "Blocked").map(p => ({
+  name: p.name,
+  issues: [
+    p.workflows.some(w => w.consistencyChecks.some(cc => cc.successRate <= 30))
+      ? "Failed tests, Pipeline is blocked, Failed workflow"
+      : "1 Failed tests, Pipeline is blocked, 2 Failed workflows",
+  ],
+  tip: "Tip: Check fix the workflow, abort the sev, or run self remediation in the pipeline details.",
+}));
+
+interface BlockedPipelineItemProps {
+  pipeline: typeof blockedPipelineDetails[0];
+}
+
+const BlockedPipelineItem = ({ pipeline }: BlockedPipelineItemProps) => {
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  return (
+    <div className="border rounded-lg overflow-hidden bg-card">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors text-left"
+      >
+        <div className="flex items-center gap-2">
+          {isExpanded ? (
+            <ChevronDown className="w-4 h-4 text-muted-foreground" />
+          ) : (
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          )}
+          <span className="font-medium">{pipeline.name}</span>
+        </div>
+        <Button size="sm" variant="outline" className="text-xs h-7">
+          Mark Done
+        </Button>
+      </button>
+
+      {isExpanded && (
+        <div className="px-4 pb-4 border-t bg-muted/20 pt-3 space-y-2">
+          {pipeline.issues.map((issue, idx) => (
+            <p key={idx} className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">Issues:</span> {issue}
+            </p>
+          ))}
+          <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-md p-2 text-sm text-amber-800">
+            <Lightbulb className="w-4 h-4 mt-0.5 shrink-0" />
+            <span>{pipeline.tip}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const PipelineHealth = () => {
   const { reportId } = useParams();
+  const [newActionItem, setNewActionItem] = useState("");
 
   return (
     <ReportPageLayout
@@ -320,7 +310,7 @@ const PipelineHealth = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div>
             <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Date Range</p>
-            <p className="text-sm font-medium">2026-01-19 to 2026-01-21</p>
+            <p className="text-sm font-medium">2026-01-11 to 2026-01-22</p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Resolver Groups</p>
@@ -332,7 +322,7 @@ const PipelineHealth = () => {
           </div>
           <div>
             <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Created</p>
-            <p className="text-sm font-medium">2026-01-21 15:26:23</p>
+            <p className="text-sm font-medium">2026-01-22 07:47:42</p>
           </div>
         </div>
       </ReportSection>
@@ -363,12 +353,48 @@ const PipelineHealth = () => {
         <div className="overflow-x-auto border rounded-lg">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="bg-muted/50">
                 <TableHead className="min-w-[300px]">PIPELINE</TableHead>
-                <TableHead>STATUS</TableHead>
-                <TableHead>FAILED BUILDS</TableHead>
-                <TableHead>FAILED TESTS</TableHead>
-                <TableHead>BLOCKED</TableHead>
+                <TableHead>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger className="flex items-center gap-1">
+                        STATUS
+                        <Info className="w-3 h-3 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Current pipeline status</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </TableHead>
+                <TableHead className="text-center">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger className="flex items-center gap-1 justify-center">
+                        AVG TIME TO PROD (HRS)
+                        <Info className="w-3 h-3 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Average time to production in hours</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </TableHead>
+                <TableHead className="text-center">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger className="flex items-center gap-1 justify-center">
+                        OVERRIDE/DEPLOY
+                        <Info className="w-3 h-3 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Override to deploy ratio</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </TableHead>
+                <TableHead className="text-center">DEPLOY FREQUENCY</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -386,7 +412,37 @@ const PipelineHealth = () => {
         title="Action Items"
         description="Recommended actions based on pipeline health analysis"
       >
-        <ActionItemsSection autoGeneratedItems={autoGeneratedItems} />
+        <div className="space-y-6">
+          {/* Blocked Pipelines Section */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="font-medium">Blocked Pipelines: {blockedPipelines} pipeline(s)</span>
+              <Badge className="bg-red-100 text-red-700 border-0 text-xs">
+                Mark All Done
+              </Badge>
+            </div>
+            
+            <div className="space-y-3">
+              {blockedPipelineDetails.map((pipeline) => (
+                <BlockedPipelineItem key={pipeline.name} pipeline={pipeline} />
+              ))}
+            </div>
+          </div>
+
+          {/* Add Manual Action Item */}
+          <div className="border-t pt-6">
+            <p className="text-sm font-medium text-muted-foreground mb-2">Add Manual Action Item</p>
+            <div className="flex gap-2">
+              <Input
+                placeholder="Enter action item..."
+                value={newActionItem}
+                onChange={(e) => setNewActionItem(e.target.value)}
+                className="flex-1"
+              />
+              <Button size="sm">Add</Button>
+            </div>
+          </div>
+        </div>
       </ReportSection>
     </ReportPageLayout>
   );
