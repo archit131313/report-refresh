@@ -350,54 +350,58 @@ const PipelineHealth = () => {
         title={`All Pipelines (${totalPipelines})`}
         description="Click on a pipeline to view detailed workflow and deployment information"
       >
-        <div className="overflow-x-auto border rounded-lg">
+        <div className="overflow-x-auto border rounded-xl shadow-sm bg-card">
           <Table>
             <TableHeader>
-              <TableRow className="bg-muted/50">
-                <TableHead className="min-w-[300px]">PIPELINE</TableHead>
-                <TableHead>
+              <TableRow className="bg-gradient-to-r from-muted/80 to-muted/50 border-b-2 border-border/50">
+                <TableHead className="min-w-[300px] py-4 text-xs font-bold uppercase tracking-wider text-foreground/70 hover:text-foreground hover:bg-muted/70 transition-colors cursor-default">
+                  PIPELINE
+                </TableHead>
+                <TableHead className="py-4 text-xs font-bold uppercase tracking-wider text-foreground/70 hover:text-foreground hover:bg-muted/70 transition-colors cursor-default">
                   <TooltipProvider>
                     <Tooltip>
-                      <TooltipTrigger className="flex items-center gap-1">
+                      <TooltipTrigger className="flex items-center gap-1.5 cursor-help">
                         STATUS
-                        <Info className="w-3 h-3 text-muted-foreground" />
+                        <Info className="w-3.5 h-3.5 text-muted-foreground/60" />
                       </TooltipTrigger>
-                      <TooltipContent>
+                      <TooltipContent className="bg-popover border shadow-lg">
                         <p>Current pipeline status</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                 </TableHead>
-                <TableHead className="text-center">
+                <TableHead className="text-center py-4 text-xs font-bold uppercase tracking-wider text-foreground/70 hover:text-foreground hover:bg-muted/70 transition-colors cursor-default">
                   <TooltipProvider>
                     <Tooltip>
-                      <TooltipTrigger className="flex items-center gap-1 justify-center">
+                      <TooltipTrigger className="flex items-center gap-1.5 justify-center cursor-help">
                         AVG TIME TO PROD (HRS)
-                        <Info className="w-3 h-3 text-muted-foreground" />
+                        <Info className="w-3.5 h-3.5 text-muted-foreground/60" />
                       </TooltipTrigger>
-                      <TooltipContent>
+                      <TooltipContent className="bg-popover border shadow-lg">
                         <p>Average time to production in hours</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                 </TableHead>
-                <TableHead className="text-center">
+                <TableHead className="text-center py-4 text-xs font-bold uppercase tracking-wider text-foreground/70 hover:text-foreground hover:bg-muted/70 transition-colors cursor-default">
                   <TooltipProvider>
                     <Tooltip>
-                      <TooltipTrigger className="flex items-center gap-1 justify-center">
+                      <TooltipTrigger className="flex items-center gap-1.5 justify-center cursor-help">
                         OVERRIDE/DEPLOY
-                        <Info className="w-3 h-3 text-muted-foreground" />
+                        <Info className="w-3.5 h-3.5 text-muted-foreground/60" />
                       </TooltipTrigger>
-                      <TooltipContent>
+                      <TooltipContent className="bg-popover border shadow-lg">
                         <p>Override to deploy ratio</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                 </TableHead>
-                <TableHead className="text-center">DEPLOY FREQUENCY</TableHead>
+                <TableHead className="text-center py-4 text-xs font-bold uppercase tracking-wider text-foreground/70 hover:text-foreground hover:bg-muted/70 transition-colors cursor-default">
+                  DEPLOY FREQUENCY
+                </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="divide-y divide-border/50">
               {pipelinesData.map((pipeline) => (
                 <PipelineRow key={pipeline.name} pipeline={pipeline} />
               ))}
