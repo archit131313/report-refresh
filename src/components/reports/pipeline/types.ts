@@ -11,11 +11,17 @@ export interface Workflow {
   consistencyChecks: ConsistencyCheck[];
 }
 
+export interface FileChange {
+  fileName: string;
+  commitHash: string;
+}
+
 export interface CodeReview {
   id: string;
   author: string;
   description: string;
   deployedTo: string[];
+  fileChanges?: FileChange[];
 }
 
 export interface CommitWithoutCR {
@@ -28,9 +34,9 @@ export interface CommitWithoutCR {
 export interface Pipeline {
   name: string;
   status: "Available" | "Blocked" | "Unhealthy";
-  failedBuilds: number;
-  failedTests: number;
-  blocked: boolean;
+  avgTimeToProdHrs: number;
+  overrideDeploy: number;
+  deployFrequency: string;
   workflows: Workflow[];
   codeReviews: CodeReview[];
   commitsWithoutCR: CommitWithoutCR[];
